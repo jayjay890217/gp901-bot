@@ -11,6 +11,13 @@ LINE_ACCESS_TOKEN = os.environ.get('LINE_ACCESS_TOKEN')
 LINE_DESTINATION_ID = os.environ.get('LINE_DESTINATION_ID')
 line_bot_api = LineBotApi(LINE_ACCESS_TOKEN)
 
+# 這是專門用來抓 LINE 群組 ID 的門
+@app.route("/callback", methods=['POST'])
+def callback():
+    body = request.get_data(as_text=True)
+    print(f"👂 LINE 傳來訊息了: {body}") # 這行會把群組 ID 噴在 Logs 裡
+    return 'OK'
+
 @app.route('/appsheet_webhook', methods=['POST'])
 def handle_appsheet():
     data = request.json
