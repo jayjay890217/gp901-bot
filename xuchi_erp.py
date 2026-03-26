@@ -80,7 +80,7 @@ def handle_appsheet():
             image_url = f"https://www.appsheet.com/template/gettablefileurl?appName={app_id}&tableName={table_encoded}&fileName={file_encoded}"
 
             bubbles.append({
-                "type": "bubble", "size": "micro",
+                "type": "bubble", "size": "mega",
                 "hero": { "type": "image", "url": image_url, "size": "full", "aspectRatio": "4:3", "aspectMode": "cover" },
                 "body": { "type": "box", "layout": "vertical", "contents": [{"type": "text", "text": label, "weight": "bold", "size": "sm", "align": "center"}] },
                 "footer": { "type": "box", "layout": "vertical", "contents": [{"type": "button", "action": {"type": "uri", "label": "原圖", "uri": image_url}, "style": "link", "height": "sm"}] }
