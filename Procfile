@@ -1,0 +1,1 @@
+web: gunicorn xuchi_erp:app
