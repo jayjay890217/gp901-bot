@@ -22,7 +22,7 @@ def handle_appsheet():
     images_dict = data.get('images', {})
     
     app_id = "f8297f93-348b-44d5-8831-8e9b7e95a1ea"
-    table_encoded = quote("表_2") # 請確認這是您 Google Sheets 的分頁名稱
+    table_encoded = quote("文件明細表") # 請確認這是您 Google Sheets 的分頁名稱
 
     # 1. 製作「摘要卡片」
     details = [
