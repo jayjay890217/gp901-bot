@@ -52,19 +52,24 @@ def handle_appsheet():
         header_text = f"⚠️ 案件修正 (第 {update_count-1} 次)"
         header_color = "#E67E22"
 
-    # 3. 製作摘要卡片
+   # 3. 製作摘要卡片 (大字加強版)
     bubbles = [{
-        "type": "bubble", "size": "mega",
+        "type": "bubble", 
+        "size": "mega", 
         "header": {
             "type": "box", "layout": "vertical", "backgroundColor": header_color,
-            "contents": [{"type": "text", "text": header_text, "color": "#ffffff", "weight": "bold", "size": "sm"}]
+            "contents": [{"type": "text", "text": header_text, "color": "#ffffff", "weight": "bold", "size": "md"}] # 標題變大
         },
         "body": {
-            "type": "box", "layout": "vertical", "spacing": "sm",
+            "type": "box", "layout": "vertical", "spacing": "md", # 間距加大一點比較不擠
             "contents": [
-                {"type": "text", "text": f"👤 客戶: {customer}", "weight": "bold", "size": "sm"},
+                # 客戶姓名加到 lg (大型)，且加粗
+                {"type": "text", "text": f"👤 客戶: {customer}", "weight": "bold", "size": "lg", "color": "#111111"},
                 {"type": "separator", "margin": "md"},
-                {"type": "text", "text": info_text, "size": "xxs", "wrap": True, "margin": "md"},
+                # 訂單細節改為 sm (標準) 或 md (中型)，原本是 xxs 太小了
+                {"type": "text", "text": info_text, "size": "sm", "wrap": True, "margin": "md", "lineSpacing": "5px"}, 
+                {"type": "separator", "margin": "md"},
+                # 單號維持小字，因為不常用
                 {"type": "text", "text": f"單號: {case_id}", "size": "xxs", "color": "#aaaaaa"}
             ]
         }
