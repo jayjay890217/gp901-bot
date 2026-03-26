@@ -38,9 +38,8 @@ def handle_appsheet():
         f"🏍️ 車種: {info.get('車種', '未填')} ({info.get('CC數', '-')})",
         f"🎨 顏色: {info.get('顏色', '未填')} / {info.get('款式', '-')}",
         f"💰 付款: {info.get('方式', '未填')}",
-        f"📝 領牌: {info.get('領牌', '未填')}",
-        f"🔢 選號: {info.get('選號', '無')}",
-        f"♻️ 汰舊: {info.get('汰舊', '無')}"
+        f"📝 領牌: {info.get('領牌', '未填')} {info.get('汰舊', '無')}",
+        f"🔢 選號: {info.get('選號', '無')}"  
     ]
     info_text = "\n".join(details_list)
 
