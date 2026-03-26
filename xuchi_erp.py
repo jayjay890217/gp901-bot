@@ -54,7 +54,7 @@ def handle_appsheet():
 
     # 3. 製作摘要卡片
     bubbles = [{
-        "type": "bubble", "size": "micro",
+        "type": "bubble", "size": "mega",
         "header": {
             "type": "box", "layout": "vertical", "backgroundColor": header_color,
             "contents": [{"type": "text", "text": header_text, "color": "#ffffff", "weight": "bold", "size": "sm"}]
