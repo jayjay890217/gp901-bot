@@ -37,7 +37,7 @@ def handle_appsheet():
         f"📞 電話: {info.get('電話', '未填')}",
         f"🏍️ 車種: {info.get('車種', '未填')} ({info.get('CC數', '-')})",
         f"🎨 顏色: {info.get('顏色', '未填')} / {info.get('款式', '-')}",
-        f"💰 付款: {info.get('方式', '未填')}",
+        f"💰 付款: {info.get('方式', '未填')} {info.get('期數', '-')}",
         f"📝 領牌: {info.get('領牌', '未填')} {info.get('選號', '無')}",
         f"♻️ 汰舊: {info.get('汰舊') or '無'}"  
     ]
