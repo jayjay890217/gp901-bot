@@ -9,8 +9,9 @@ app = Flask(__name__)
 # --- 設定區：請在 Render 的 Environment Variables 設定這些值 ---
 # 1. LINE Channel Access Token
 LINE_TOKEN = os.environ.get('LINE_CHANNEL_ACCESS_TOKEN')
-# 2. 你的 LINE User ID (或是要接收訊息的群組 ID)
-USER_ID = os.environ.get('USER_ID')
+# 統一設定：把這個 ID 當成店裡的「總收件地址」
+# 確保你在 Render 的 Environment Variables 裡，Key 的名稱是 LINE_DESTINATION_ID
+LINE_DESTINATION_ID = os.environ.get('LINE_DESTINATION_ID')
 
 line_bot_api = LineBotApi(LINE_TOKEN)
 
