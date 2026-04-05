@@ -54,7 +54,7 @@ def webhook():
 
     # 3. 發送到 LINE
     try:
-        line_bot_api.push_message(USER_ID, TextSendMessage(text=msg))
+        line_bot_api.push_message(target_id, TextSendMessage(text=msg))
         print("LINE 訊息發送成功！")
     except Exception as e:
         print(f"發送失敗：{e}")
