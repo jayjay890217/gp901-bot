@@ -18,7 +18,7 @@ def callback():
     print(f"👂 LINE 傳來訊息了: {body}") 
     return 'OK'
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/appsheet_webhook', methods=['POST'])
 def handle_appsheet():
     data = request.json
     print(f"🚀 收到 AppSheet 請求內容: {data}")
