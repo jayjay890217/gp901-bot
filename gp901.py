@@ -40,16 +40,39 @@ def handle_tire_order():
             except:
                 pass
         
+        # 3. 處理清單內容 (加強版)
+    order_list = data.get('order_list', [])
+    print(f"🧐 收到清單內容: {order_list}") # 這行會幫我們在 Logs 抓出兇手
+
+    if not order_list or len(order_list) == 0:
+        msg += "⚠️ 目前清單中無待發報項目\n"
+    else:
+        # 如果 AppSheet 傳來的是單一字串，先轉成清單
+        if isinstance(order_list, str):
+            try:
+                order_list = json.loads(order_list)
+            except:
+                order_list = [order_list] # 真的轉不動就當成一筆資料
+        
         for i, item in enumerate(order_list, 1):
-            # 跳過結尾標記或空資料
-            if not isinstance(item, dict) or item.get('is_end') == "true":
-                continue
+            # --- 關鍵修正：如果 item 是字串，嘗試再解析一次 ---
+            if isinstance(item, str):
+                try:
+                    item = json.loads(item)
+                except:
+                    # 如果不是 JSON 格式，就直接把字串印出來
+                    msg += f"{i}. {item}\n"
+                    continue
             
-            # 支援多種欄位名稱抓取 (中文/英文都通)
-            spec = item.get('spec') or item.get('輪胎規格') or '未知規格'
-            size = item.get('size') or item.get('輪胎尺寸') or '未知尺寸'
+            # 抓取資料 (不管欄位叫什麼都試試看)
+            spec = item.get('spec') or item.get('輪胎規格') or '規格未填'
+            size = item.get('size') or item.get('輪胎尺寸') or '尺寸未填'
             qty = item.get('qty') or item.get('數量') or 0
-            msg += f"{i}. {spec} - {size} * {qty}條\n"
+            
+            # 跳過結尾標記
+            if item.get('is_end') == "true": continue 
+            
+            msg += f"{i}. {spec} / {size} * {qty}條\n"
 
     msg += "--------------------------\n請盡速處理，謝謝。"
 
