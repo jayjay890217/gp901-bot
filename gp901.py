@@ -28,8 +28,7 @@ def handle_tire_order():
     store = data.get('store', '未知店家')
     grand_total = data.get('grand_total', 0) # 👈 這裡接收 AppSheet 算好的總計
     
-    msg = f"📦 【旭馳車業】批量叫料通知\n發報店家：{store}\n--------------------------\n"
-
+    msg = f"📦 【旭馳車業】GP901叫料通知\n送單店家：{store}\n--------------------------\n"
     # 3. 處理清單內容
     order_list = data.get('order_list', [])
     if not order_list or len(order_list) == 0:
@@ -55,7 +54,7 @@ def handle_tire_order():
             if item.get('is_end') == "true": continue 
             
             # 每行顯示單筆規格與金額
-            msg += f"{i}. {spec} / {size} * {qty}條 (${money})\n"
+            msg += f"{i}. {spec} / {size} * {qty}條 ({money})\n
 
     # 👈 在結尾補上整筆訂單的總計金額
     msg += f"--------------------------\n💰 總計金額：{grand_total} 元\n請盡速處理，謝謝。"
