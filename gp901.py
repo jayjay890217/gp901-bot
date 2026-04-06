@@ -24,57 +24,41 @@ def handle_tire_order():
     # 1. 抓取地址
     target_id = data.get('target_id') or data.get('lineid') or BACKUP_ID
     
-    # 2. 【關鍵修正】先初始化 msg 變數，防止它「未定義」
+    # 2. 初始化訊息與抓取總金額
     store = data.get('store', '未知店家')
-    msg = f"📦 【旭馳車業】GP901叫料通知\n送單店家EMAIL ：{store}\n--------------------------\n"
+    grand_total = data.get('grand_total', 0) # 👈 這裡接收 AppSheet 算好的總計
+    
+    msg = f"📦 【旭馳車業】批量叫料通知\n發報店家：{store}\n--------------------------\n"
 
     # 3. 處理清單內容
     order_list = data.get('order_list', [])
-    if not order_list:
-        msg += "⚠️ 目前清單中無待發報項目\n"
-    else:
-        # 如果 AppSheet 傳來的是字串格式，先轉成清單
-        if isinstance(order_list, str):
-            try:
-                order_list = json.loads(order_list)
-            except:
-                pass
-        
-        # 3. 處理清單內容 (加強版)
-    order_list = data.get('order_list', [])
-    print(f"🧐 收到清單內容: {order_list}") # 這行會幫我們在 Logs 抓出兇手
-
     if not order_list or len(order_list) == 0:
         msg += "⚠️ 目前清單中無待發報項目\n"
     else:
-        # 如果 AppSheet 傳來的是單一字串，先轉成清單
         if isinstance(order_list, str):
             try:
                 order_list = json.loads(order_list)
             except:
-                order_list = [order_list] # 真的轉不動就當成一筆資料
+                order_list = [order_list]
         
         for i, item in enumerate(order_list, 1):
-            # --- 關鍵修正：如果 item 是字串，嘗試再解析一次 ---
             if isinstance(item, str):
-                try:
-                    item = json.loads(item)
-                except:
-                    # 如果不是 JSON 格式，就直接把字串印出來
-                    msg += f"{i}. {item}\n"
-                    continue
+                try: item = json.loads(item)
+                except: continue
             
-            # 抓取資料 (不管欄位叫什麼都試試看)
+            # 抓取每筆資料 (加上了單筆小計)
             spec = item.get('spec') or item.get('輪胎規格') or '規格未填'
             size = item.get('size') or item.get('輪胎尺寸') or '尺寸未填'
             qty = item.get('qty') or item.get('數量') or 0
             money = item.get('money') or 0
-            # 跳過結尾標記
+            
             if item.get('is_end') == "true": continue 
             
-            msg += f"{i}. {spec} / {size} * {qty}條\n"
+            # 每行顯示單筆規格與金額
+            msg += f"{i}. {spec} / {size} * {qty}條 (${money})\n"
 
-    msg += f"--------------------------\n此單金額：{money}元\n請盡速處理，謝謝。"
+    # 👈 在結尾補上整筆訂單的總計金額
+    msg += f"--------------------------\n💰 總計金額：{grand_total} 元\n請盡速處理，謝謝。"
 
     # 4. 發送訊息
     try:
@@ -85,7 +69,6 @@ def handle_tire_order():
         print("✅ LINE 訊息發送成功！")
         return "OK", 200
     except Exception as e:
-        # 這裡會印出為什麼失敗，幫助我們排查
         print(f"❌ 輪胎發送失敗：{str(e)}")
         return str(e), 500
     try:
