@@ -26,7 +26,7 @@ def handle_tire_order():
     
     # 2. 【關鍵修正】先初始化 msg 變數，防止它「未定義」
     store = data.get('store', '未知店家')
-    msg = f"📦 【旭馳車業】批量叫料通知\n送單店家EMAIL：{store}\n--------------------------\n"
+    msg = f"📦 【旭馳車業】GP901叫料通知\n送單店家EMAIL ：{store}\n--------------------------\n"
 
     # 3. 處理清單內容
     order_list = data.get('order_list', [])
@@ -68,7 +68,7 @@ def handle_tire_order():
             spec = item.get('spec') or item.get('輪胎規格') or '規格未填'
             size = item.get('size') or item.get('輪胎尺寸') or '尺寸未填'
             qty = item.get('qty') or item.get('數量') or 0
-            
+            money = item.get('money') or 0
             # 跳過結尾標記
             if item.get('is_end') == "true": continue 
             
