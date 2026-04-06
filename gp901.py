@@ -54,7 +54,7 @@ def handle_tire_order():
             if item.get('is_end') == "true": continue 
             
             # 每行顯示單筆規格與金額
-            msg += f"{i}. {spec} / {size} * {qty}條 ({money})\n
+            msg += f"{i}. {spec} / {size} * {qty}條 ({money})\n"
 
     # 👈 在結尾補上整筆訂單的總計金額
     msg += f"--------------------------\n💰 總計金額：{grand_total} 元\n請盡速處理，謝謝。"
