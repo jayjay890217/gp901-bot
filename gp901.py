@@ -21,15 +21,50 @@ def handle_tire_order():
     if not data: return "No Data", 400
     print(f"📦 收到【輪胎系統】請求")
 
-    # --- 關鍵修正：定義 target_id ---
-    # 它會按順序找：AppSheet 傳來的 target_id -> AppSheet 傳來的 lineid -> Render 的預設 ID
-    target_id = data.get('target_id') or data.get('lineid') or LINE_DESTINATION_ID
-
+    # 1. 抓取地址
+    target_id = data.get('target_id') or data.get('lineid') or BACKUP_ID
+    
+    # 2. 【關鍵修正】先初始化 msg 變數，防止它「未定義」
     store = data.get('store', '未知店家')
+    msg = f"📦 【旭馳車業】批量叫料通知\n發報店家：{store}\n--------------------------\n"
+
+    # 3. 處理清單內容
     order_list = data.get('order_list', [])
+    if not order_list:
+        msg += "⚠️ 目前清單中無待發報項目\n"
+    else:
+        # 如果 AppSheet 傳來的是字串格式，先轉成清單
+        if isinstance(order_list, str):
+            try:
+                order_list = json.loads(order_list)
+            except:
+                pass
+        
+        for i, item in enumerate(order_list, 1):
+            # 跳過結尾標記或空資料
+            if not isinstance(item, dict) or item.get('is_end') == "true":
+                continue
+            
+            # 支援多種欄位名稱抓取 (中文/英文都通)
+            spec = item.get('spec') or item.get('輪胎規格') or '未知規格'
+            size = item.get('size') or item.get('輪胎尺寸') or '未知尺寸'
+            qty = item.get('qty') or item.get('數量') or 0
+            msg += f"{i}. {spec} - {size} * {qty}條\n"
 
-    # ...中間組裝訊息的程式碼照舊...
+    msg += "--------------------------\n請盡速處理，謝謝。"
 
+    # 4. 發送訊息
+    try:
+        if not target_id:
+            raise ValueError("找不到收件地址 (target_id)")
+            
+        line_bot_api.push_message(target_id, TextSendMessage(text=msg))
+        print("✅ LINE 訊息發送成功！")
+        return "OK", 200
+    except Exception as e:
+        # 這裡會印出為什麼失敗，幫助我們排查
+        print(f"❌ 輪胎發送失敗：{str(e)}")
+        return str(e), 500
     try:
         # 現在這裡有 target_id 了，就不會再報錯
         line_bot_api.push_message(target_id, TextSendMessage(text=msg))
