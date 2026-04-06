@@ -26,7 +26,7 @@ def handle_tire_order():
     
     # 2. 【關鍵修正】先初始化 msg 變數，防止它「未定義」
     store = data.get('store', '未知店家')
-    msg = f"📦 【旭馳車業】批量叫料通知\n發報店家：{store}\n--------------------------\n"
+    msg = f"📦 【旭馳車業】批量叫料通知\n送單店家EMAIL：{store}\n--------------------------\n"
 
     # 3. 處理清單內容
     order_list = data.get('order_list', [])
@@ -74,7 +74,7 @@ def handle_tire_order():
             
             msg += f"{i}. {spec} / {size} * {qty}條\n"
 
-    msg += "--------------------------\n請盡速處理，謝謝。"
+         msg += "--------------------------\n此單金額\n請盡速處理，謝謝。"
 
     # 4. 發送訊息
     try:
